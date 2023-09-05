@@ -36,4 +36,15 @@
 		<property name="mapperLocations" value="classpath:net/daum/mappers/*/*.xml" />
 		<!-- SQL문을 별도로 관리하는 mybatis 매퍼 xml태그 경로 -->
 	</bean>	
+	
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"
+	destroy-method="clearCache"> <!--destroy-method="clearCache" 임시 메모리 캐쉬를 비워서
+	데이터베이스 연결을 해제한다.  -->
+	  <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+	  <!-- 생성자를 통한 의존성 주입, ref 빈아이디를 호출. -->	
+	</bean>
+	
+	<context:component-scan base-package="net.daum.dao" />
+	<!-- net.daum.dao패키지에 설정된 @Repository 애노테이션이 설정된 모델 DAOImpl클래스를 스프링에서
+	자동으로 찾아서 등록해서 인식하게 함. -->
 </beans>
