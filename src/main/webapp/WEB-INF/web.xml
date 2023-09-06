@@ -30,4 +30,20 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
+	<!-- method=post로 전송되는 한글을 안 깨지게 한다. -->
+	<filter>
+	 <filter-name>encoding</filter-name>
+	 <filter-class>
+	   org.springframework.web.filter.CharacterEncodingFilter
+	 </filter-class>
+	 <init-param>
+	   <param-name>encoding</param-name>
+	   <param-value>UTF-8</param-value>
+	 </init-param>
+	</filter>
+	
+	<filter-mapping>
+	  <filter-name>encoding</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
 </web-app>
