@@ -1,13 +1,31 @@
 package net.daum.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.daum.dao.BoardDAO;
+import net.daum.vo.BoardVO;
 
 @Service //@Service 애노테이션을 추가함으로써 스프링에 서비스라는 것을 인식하게 한다.
-public class BoardServiceImpl implements BoardServie {
+public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
 	private BoardDAO boardDao;
+
+	@Override
+	public void insertBoard(BoardVO b) {
+		this.boardDao.insertBoard(b);
+	}
+
+	@Override
+	public int getTotalCount() {
+		return this.boardDao.getTotalCount();//this.생략가능함;
+	}
+
+	@Override
+	public List<BoardVO> getBoardList(BoardVO b) {
+		return this.boardDao.getBoardList(b);
+	}
 }
