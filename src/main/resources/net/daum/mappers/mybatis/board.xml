@@ -29,4 +29,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	  <!-- rowNum컬럼은 오라클 테이블 생성시 기본으로 추가되는 것으로 최초 레코드 저장시 1부터 1씩 증가되는 일련번호
 	  값이 저장된다. &gt;은~보다 크다(>), &lt;은 ~보다 작다(<) -->
 	</select>
+	
+	<!-- 내용보기 -->
+	<select id="board_cont" resultType="net.daum.vo.BoardVO"><!-- parameterType은 생략가능함 -->
+	  select * from tbl_board where bno=#{bno}
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="board_hit" parameterType="int">
+	  update tbl_board set viewcnt=viewcnt+1 where bno=#{bno}
+	</update>
+	
+	<!-- 게시판 수정 -->
+	<update id="board_edit" parameterType="board">
+	  update tbl_board set writer=#{writer}, title=#{title}, content=#{content}
+	  where bno=#{bno}
+	</update>
+	
+	<!-- 게시물 삭제 -->
+	<delete id="board_del">
+	  delete tbl_board where bno=#{bno} <!-- 쿼리문에서 from절문 생략가능함. -->
+	</delete>
+	
 </mapper>

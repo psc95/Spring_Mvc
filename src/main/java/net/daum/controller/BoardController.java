@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -97,4 +99,62 @@ public class BoardController {//스프링 MVC게시판 컨트롤러
 		
 		return "board/board_list";//뷰페이지 경로=>/WEB-INF/views/board/board_list.jsp
 	}//board_list()
+	
+	//내용보기 + 조회수증가 + 수정폼
+	@RequestMapping("/board_cont") //get or post로 접근하는 매핑주소를 처리, board_cont매핑주소
+	//등록
+	public ModelAndView board_cont(@RequestParam("bno") int bno, int page, 
+			String state,BoardVO b) {
+		/* @RequestParam("bno")는 request.getParameter("bno")와 기능이 같다.
+		 * get으로 전달된 bno 네임피라미터 값인 번호값을 가져온다.
+		 * int page,String state는 get으로 전달된 page,state네임피라미터에 담겨져서 전달된 쪽번호와
+		 * cont구분값을 가져온다.
+		 */
+		if(state.equals("cont")) {// 내용보기 일때만 조회수가 증가
+			b = this.boardService.getBoardCont(bno);
+		}else {//수정폼일때는 조회수 증가 안된다.
+			b = this.boardService.getBoardCont2(bno);
+		}
+		
+		String content = b.getContent().replace("\n","<br>");//textarea입력박스에서 엔터키를
+		//친 부분을 줄바꿈 처리한다.
+		
+		ModelAndView cm = new ModelAndView();
+		cm.addObject("page", page);//페이징에서 책갈피 기능때문에 쪽번호 저장
+		cm.addObject("b",b);
+		cm.addObject("content",content);
+		
+		if(state.equals("cont")) {//내용보기일때 실행
+			cm.setViewName("board/board_cont");//뷰리졸브 경로는 /WEB-INF/views/board/
+			// board_cont.jsp
+		}else if(state.equals("edit")) {//수정폼일때
+			cm.setViewName("board/board_edit");
+		}
+		return cm;
+	}//board_cont()
+	
+	//게시판 수정 완료
+	@PostMapping("/board_edit_ok") //post로 접근하는 매핑주소 처리
+	public String board_edit_ok(BoardVO eb,int page,Model m) {
+		/* BoardVO eb라고 하면 네임피라미터 이름과 빈클래스 변수명이 같으면 eb객체에 bno,writer,title,
+		 * content 까지 저장되어 있다. 하지만 page는 빈클래스 변수명에 없기 때문에 int page로 별도로 가져와
+		 * 야 한다.
+		 */
+		this.boardService.editBoard(eb);
+		
+		m.addAttribute("page", page);
+		m.addAttribute("bno", eb.getBno());
+		m.addAttribute("state", "cont");
+		
+		return "redirect:/board/board_cont";//웹주소 창에 다음과 같은 매핑주소가 실행된다.
+		//board_cont?page=쪽번호&bno=번호&state=cont 형태의 get방식으로 3개의 피라미터 값이 전달된다.
+	}//board_edit_ok()
+	
+	//게시물 삭제
+	@GetMapping("/board_del") //get으로 접근하는 매핑주소 처리
+	public ModelAndView board_del(int page,int bno,RedirectAttributes rttr) {
+		this.boardService.delBoard(bno);//번호를 기준으로 삭제
+		rttr.addFlashAttribute("result", "success");
+		return new ModelAndView("redirect:/board/board_list?page="+page);
+	}//board_del()
 }
