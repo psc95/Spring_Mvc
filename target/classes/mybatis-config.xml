@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     	 사용한다. -->
     
     <typeAlias type="net.daum.vo.BoardVO" alias="board" />
+    <typeAlias type="net.daum.vo.ReplyVO" alias="reply"/>
     
   </typeAliases>
 </configuration>

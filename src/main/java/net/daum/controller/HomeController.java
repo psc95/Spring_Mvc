@@ -38,4 +38,9 @@ public class HomeController {
 		return "home";//뷰리졸브 경로 즉 뷰페이지 경로는 /WEB-INF/views/home.jsp
 	}
 	
+	//아작스 댓글 뷰페이지
+	@RequestMapping("/test") //test매핑주소 등록
+	public void test() {
+		//리턴 타입이 없는 void형이면 매핑주소인 test가 뷰페이지 파일명이 된다.
+	}
 }
