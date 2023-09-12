@@ -22,7 +22,7 @@
 <%-- 댓글 수정화면 --%>
  <div id="modDiv" style="display:none;">
    <%--display:none;은 댓글 수정화면을 안나오게 한다. --%>
-   <div class="modal-no"></div><%-- 댓글 번호 출력부분 --%>
+   <div class="modal-rno"></div><%-- 댓글 번호 출력부분 --%>
    <div>
     <textarea rows="3" cols="30" id="replytext"></textarea>
    </div> 
@@ -117,7 +117,55 @@
     //댓글 수정화면 닫기
     function modDivClose(){
     	$('#modDiv').hide('slow');
-    }//modDivClose()
+    }//modDivClose()h
+    
+    //댓글 수정 완료
+    $('#replyModBtn').on('click',function(){
+    	$rno = $('.modal-rno').html(); //댓글 번호
+    	$replytext = $('#replytext').val(); //수정할 댓글 내용
+    	
+    	$.ajax({
+    		type:'put', //보내는 방식
+    		url:'/controller/replies/'+$rno, //서버 매핑주소
+    		headers:{
+    			"Content-Type" : "application/json",
+    			"X-HTTP-Method-Override" : "PUT"
+    		},
+    		data:JSON.stringify({
+    			replytext : $replytext
+    		}),
+    		dataType:'text',
+    		success:function(result){
+    			if(result == 'SUCCESS'){
+    				alert('댓글이 수정이 되었습니다!');
+    				$('#modDiv').hide(300);//댓글 수정화면을 닫는다. 1000이 1초
+    				getAllList(); //댓글 목록함수 호출
+    			}
+    		}
+    	});
+    });
+    
+    //댓글 삭제
+    $('#replyDelBtn').on('click',function(){
+    	$rno = $('.modal-rno').html(); //댓글 번호
+    	
+    	$.ajax({
+    		type : 'delete',
+    		url : '/controller/replies/'+$rno,
+    		headers : {
+    			"Content-Type" : "application/json",
+    			"X-HTTP-Method-Override" : "DELETE"
+    		},
+    		dataType:"text",
+    		success:function(data){
+    			if(data == 'SUCCESS'){
+    				alert('댓글이 삭제되었습니다!');
+    				$('#modDiv').hide('slow');
+    				getAllList();
+    			}
+    		}
+    	});
+    });
   </script>
 </body>
 </html>

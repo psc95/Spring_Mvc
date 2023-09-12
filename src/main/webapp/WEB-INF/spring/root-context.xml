@@ -13,6 +13,9 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	
+	<aop:aspectj-autoproxy />
+	<!-- 스프링 AOP 자동 프록시 설정 -->
+	
 	<!-- Spring JDBC -->
 	<bean id="dataSource"
 		  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -37,6 +40,16 @@
 		<!-- SQL문을 별도로 관리하는 mybatis 매퍼 xml태그 경로 -->
 	</bean>	
 	
+	<!-- 스프링 트랜잭션 매니져(트랜잭션 관리자) 설정 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+			<property name="dataSource" ref="dataSource" />
+			<!-- setter() 메서드를 통한 의존성 주입(DI), ref 빈아이디 dataSource를 호출해서
+			오라클을 연결한다. -->
+		</bean>
+		<tx:annotation-driven/> <!-- 트랜잭션 설정 애노테이션 => @Transactional를 통한
+		 트랜잭션 관리가 가능함-->
+	
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"
 	destroy-method="clearCache"> <!--destroy-method="clearCache" 임시 메모리 캐쉬를 비워서
 	데이터베이스 연결을 해제한다.  -->
@@ -52,4 +65,6 @@
 	<!-- 서비스 추가 목적 : 첫째, 컨트롤러와 모델 DAO 연결하는 중간 매개체 역할, 둘째는 고객의 추가 요금사항을 
 	 반영, 셋째는 스프링의 aop를 통한 트랜잭션 적용이 핵심(데이터의 불일치 현상을 제거=>일관성 유지)
 	 -->
+	 
+	 <aop:config /> <!-- AOP XML 환경설정 -->
 </beans>
