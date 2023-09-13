@@ -1,6 +1,8 @@
 package net.daum.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,4 +56,14 @@ public class BoardDAOImpl implements BoardDAO {
 	public void delBoard(int bno) {
 		this.sqlSession.delete("board_del", bno);//mybatis에서 delete()메서드는 레코드를 삭제한다.
 	}//게시판 삭제
+
+	@Override
+	public void updateReplyCnt(int bno, int count) {
+		Map<String,Object> pm = new HashMap<>();//키,값 쌍으로 저장하는 컬렉션 사전적인 자료구조
+		
+		pm.put("bno",bno);//bno키이름에 게시판 번호 저장
+		pm.put("count",count);//count키이름에 1또는 -1이 저장
+		
+		this.sqlSession.update("updateReplyCnt", pm);
+	}//새로운 댓글이 추가되면 댓글 개수 1증가 또는 댓글 하나가 삭제되면 댓글 개수 1 감소
 }

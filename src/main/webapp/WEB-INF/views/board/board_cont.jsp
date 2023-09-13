@@ -88,7 +88,11 @@
    <input type="button" id="replyAddBtn" value="댓글등록" >
  </div>
  
- <br><hr><br>
+ <br>
+ <hr>
+ [<strong>${b.replycnt}개의 댓글</strong>]
+ <!-- <h2>[댓글 갯수: ${b.replycnt} 개]</h2><br> -->
+ <br>
  
  <%-- 댓글 목록 --%>
  <ul id="replies"></ul>
@@ -135,6 +139,7 @@
     		success:function($data){
     			if($data == 'SUCCESS'){
     				alert('댓글이 등록되었습니다!');
+    				location.reload();//자바스크립트에서 새로고침(단축키는 F5),평가시험에 나옴
     				getAllList();//댓글 목록 함수 호출
     			}
     		}
@@ -200,6 +205,7 @@
     			if(data == 'SUCCESS'){
     				alert('댓글이 삭제되었습니다!');
     				$('#modDiv').hide('slow');
+    				location.reload();//자바스크립트에서 새로고침(단축키는 F5),평가시험에 나옴
     				getAllList();
     			}
     		}

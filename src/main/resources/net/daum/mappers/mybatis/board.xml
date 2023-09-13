@@ -51,4 +51,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	  delete tbl_board where bno=#{bno} <!-- 쿼리문에서 from절문 생략가능함. -->
 	</delete>
 	
+	<!-- 댓글 수 수정 -->
+	<update id="updateReplyCnt" parameterType="java.util.Map">
+	  update tbl_board set replycnt = replycnt + #{count} where bno = #{bno}
+	</update>
 </mapper>

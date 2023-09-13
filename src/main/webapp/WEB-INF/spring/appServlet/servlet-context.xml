@@ -30,6 +30,7 @@
 	<!-- 스프링 컨트롤러 클래스가 들어가는 경로이다. 이 경로는 context:component-scan 인 오토스캔(자동으로 찾아서)
 	태그에 의해서 이 패키지에 만들어진 컨트롤러는 자동으로 스프링에서 인식되게 된다.-->
 	
-	
-	
+	<!-- 스프링 이진파일 업로드 API 설정: 첨부파일을 처리하는 빈아이디 설정 -->
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
 </beans:beans>
